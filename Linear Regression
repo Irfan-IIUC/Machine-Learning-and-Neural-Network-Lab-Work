@@ -1,0 +1,166 @@
+"""
+=> The probable movement of one variable in terms of the other variables is called regression
+
+=> Linear Regression with single variable (Y = mx + c) where,
+Y is the dependent variable (that's the variable that goes on the Y axis),
+X is the independent variable (i.e. it is plotted on the X axis),
+m is the slope of the line and
+c is the y-intercept
+
+Suppose you have data of population (in hundred thousand) of a medium size city over 20 years (based on every 5-year 
+census) as shown table 1. You want to predict the population in the year 2005.
+"""
+
+year = [1980, 1985, 1990, 1995, 2000]  # x
+population = [2.1, 2.9, 3.2, 4.1, 4.9]  # y
+n = 5
+
+sum_x = sum(year)
+sum_y = sum(population)
+
+sum_xy = 0
+for i in range(0, n):
+    sum_xy += (year[i] * population[i])
+
+sum_x_square = 0
+for i in range(0, n):
+    sum_x_square += (year[i] * year[i])
+
+x_bar = sum_x / n
+y_bar = sum_y / n
+
+slope = ((n * sum_xy) - (sum_x * sum_y)) / ((n * sum_x_square) - (sum_x ** 2))
+intercept = y_bar - (slope * x_bar)
+
+# using this regression line, we can predict the number of Population in the city for year 2005
+population_2005 = round((slope * 2005) + intercept, 2)
+# print(population_2005)
+
+"""
+=> Regression Goodness Of Fit (R2)
+=> It is the ratio of sum of square error (SSE) from the regression model and the sum of squares difference around
+the mean (SST = sum of square total)
+"""
+
+year = [1980, 1985, 1990, 1995, 2000]  # x
+population = [2.1, 2.9, 3.2, 4.1, 4.9]  # y
+
+a1 = []
+a2 = []
+a3 = []
+a4 = []
+a5 = []
+
+for i in range(0, n):
+    z = (slope * year[i]) + intercept
+    a1.append(z)
+
+for i in range(0, n):
+    z = population[i] - a1[i]
+    a2.append(z)
+
+for i in range(0, n):
+    z = a2[i] ** 2
+    a3.append(z)
+
+SSE = sum(a3)
+
+for i in range(0, n):
+    z = population[i] - y_bar
+    a4.append(z)
+
+for i in range(0, n):
+    z = a4[i] ** 2
+    a5.append(z)
+
+SST = sum(a5)
+
+r_square = round(1 - (SSE / SST), 2)
+# print(r_square)
+
+"""
+=> Linear Regression With Multiple Variable
+=> It measure that attempts to determine the strength of the relationship between one dependent variable and a series
+of other changing variable known as independent variable
+
+A given example where the quantity demand depends on the price and income of the product.
+"""
+
+quantity_demand = [100, 75, 80, 70, 50, 65, 90, 100, 110, 60]  # Y
+price = [5, 7, 6, 6, 8, 7, 5, 4, 3, 9]  # X1
+income = [1000, 600, 1200, 500, 300, 400, 1300, 1100, 1300, 300]  # X2
+N = 10
+
+sum_Y = sum(quantity_demand)
+sum_X1 = sum(price)
+sum_X2 = sum(income)
+
+Y_bar = sum_Y / N
+X1_bar = sum_X1 / N
+X2_bar = sum_X2 / N
+
+y = []
+x1 = []
+x2 = []
+y_square = []
+x1_square = []
+x2_square = []
+y_x1 = []
+y_x2 = []
+x1_x2 = []
+
+for i in range(0, N):
+    z = quantity_demand[i] - Y_bar
+    y.append(z)
+
+for i in range(0, N):
+    z = price[i] - X1_bar
+    x1.append(z)
+
+for i in range(0, N):
+    z = income[i] - X2_bar
+    x2.append(z)
+
+for i in range(0, N):
+    z = y[i] ** 2
+    y_square.append(z)
+
+sum_y_square = sum(y_square)
+
+for i in range(0, N):
+    z = x1[i] ** 2
+    x1_square.append(z)
+
+sum_x1_square = sum(x1_square)
+
+for i in range(0, N):
+    z = x2[i] ** 2
+    x2_square.append(z)
+
+sum_x2_square = sum(x2_square)
+
+for i in range(0, N):
+    z = y[i] * x1[i]
+    y_x1.append(z)
+
+sum_y_x1 = sum(y_x1)
+
+for i in range(0, N):
+    z = y[i] * x2[i]
+    y_x2.append(z)
+
+sum_y_x2 = sum(y_x2)
+
+for i in range(0, N):
+    z = x1[i] * x2[i]
+    x1_x2.append(z)
+
+sum_x1_x2_square = sum(x1_x2)
+
+b1 = ((sum_x2_square * sum_y_x1) - (sum_x1_x2_square * sum_y_x2)) / ((sum_x1_square * sum_x2_square) - (sum_x1_x2_square ** 2))
+b2 = ((sum_x1_square * sum_y_x2) - (sum_x1_x2_square * sum_y_x1)) / ((sum_x1_square * sum_x2_square) - (sum_x1_x2_square ** 2))
+a = Y_bar - (b1 * X1_bar) - (b2 * X2_bar)
+
+Y = a + (b1 * 6) + (b2 * 600)  # quantity demand for a product price 6 with income 600
+
+# print(Y)
