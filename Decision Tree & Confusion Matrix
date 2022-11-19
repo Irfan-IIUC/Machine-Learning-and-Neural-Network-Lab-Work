@@ -1,0 +1,37 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn
+from sklearn import tree
+
+dataset = pd.read_csv('shop data.csv')
+# print(dataset)
+x = dataset.iloc[:, :-1]
+# print(x)
+y = dataset.iloc[:, 4]
+# print(y)
+
+from sklearn.preprocessing import LabelEncoder
+x = x.apply(LabelEncoder().fit_transform)
+# print(x)
+
+from sklearn.tree import DecisionTreeClassifier
+classify = tree.DecisionTreeClassifier()
+classify = classify.fit(x, y)
+prediction = classify.predict([[1, 0, 1, 1]])
+# print(prediction)
+
+from sklearn.metrics import classification_report, confusion_matrix
+# print(classification_report(y, classify.predict(x)))
+
+cm = confusion_matrix(y, classify.predict(x))
+cm_df = pd.DataFrame(cm, index=['No', 'Yes'], columns=['No', 'Yes'])
+# print(cm_df)
+
+# plotting the confusion matrix
+plt.figure(figsize=(5, 4))
+seaborn.heatmap(cm_df, annot=True)
+plt.title('confusion matrix')
+plt.xlabel('predicted values')
+plt.ylabel('actual values')
+# plt.show()
